@@ -1,0 +1,44 @@
+<mat-card>
+    <mat-card-content>
+        <mat-card-header>
+            <mat-card-title>
+                <p>Edição de Exame </p>
+            </mat-card-title>
+        </mat-card-header>
+
+
+    </mat-card-content>
+    <form [formGroup]="formEditar">
+        <div class="formEditar">
+            <mat-form-field class="example-full-width">
+                <mat-label>Exame</mat-label>
+                <textarea matInput formControlName="nmExame" placeholder="Insira nome do exame"></textarea>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>Descriçao </mat-label>
+                <textarea matInput formControlName="ds_detalhe_exame" placeholder="Insira a descricao"></textarea>
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+                <mat-label>Descricao 2</mat-label>
+                <textarea matInput formControlName="ds_detalhe_exame1"
+                    placeholder="Insira a segunda descricao"></textarea>
+            </mat-form-field>
+            <section class="example-section">
+                <mat-label class="example-margin">Ativo: </mat-label>
+                <mat-radio-group matInput formControlName="ic_ativo">
+                    <mat-radio-button class="example-margin" [value]="true">Sim</mat-radio-button>
+                    <mat-radio-button class="example-margin" [value]="false">Não</mat-radio-button>
+                </mat-radio-group>
+            </section>
+        </div>
+        <button class="btn btn-lg btn-success" type="submit" (click)="onSubmitExame()">Salvar
+            Exame</button>
+
+    </form>
+    <mat-card-footer>
+        <div class="container" *ngIf="formEditar.get('exame')?.invalid && formEditar.get('exame')?.touched ">
+            <p class="alert alert-danger ">Campo Exame é obrigatório.</p>
+        </div>
+    </mat-card-footer>
+</mat-card>

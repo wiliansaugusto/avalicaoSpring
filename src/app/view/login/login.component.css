@@ -1,0 +1,20 @@
+.formInput {
+    display: flex;
+    flex-direction: column;
+    width: 50vw;
+}
+mat-card-footer{
+    margin-top: 10px;
+}
+.formBody{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+@media screen and (max-width:500px) {
+    .formInput {
+
+        width: 80vw;
+    }
+
+}

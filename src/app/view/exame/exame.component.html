@@ -1,0 +1,205 @@
+<div class="corpo">
+    <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-6 ">
+            <mat-expansion-panel (opened)="openPanel('painelNovoExame')" [expanded]="isPanelOpen('painelNovoExame')">
+                <mat-expansion-panel-header>
+                    <mat-panel-title> Cadastrar Novo Exame </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>Abaixo voce poderá Inserir um novo Exame </p>
+
+                <mat-card>
+                    <mat-card-content>
+                    </mat-card-content>
+                    <form [formGroup]="formNovoExame">
+                        <div class="formNovoExame">
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Exame</mat-label>
+                                <textarea matInput formControlName="exame" placeholder="Insira o nome do Exame"></textarea>
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Descriçao </mat-label>
+                                <textarea matInput formControlName="descricao"
+                                    placeholder="Insira a descricao"></textarea>
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Descricao 2</mat-label>
+                                <textarea matInput formControlName="descricao1"
+                                    placeholder="Insira a segunda descricao"></textarea>
+                            </mat-form-field>
+                            <section class="example-section">
+                                <mat-label class="example-margin">Ativo: </mat-label>
+                                <mat-radio-group matInput formControlName="ic_ativo">
+                                    <mat-radio-button class="example-margin" checked value="true">Sim</mat-radio-button>
+                                    <mat-radio-button class="example-margin" value="false">Não</mat-radio-button>
+                                </mat-radio-group>
+                            </section>
+                        </div>
+                        <button class="btn btn-lg btn-success" type="submit" (click)="onSubmitExame()">Salvar
+                            Exame</button>
+
+                    </form>
+                    <mat-card-footer>
+                        <div class="container"
+                            *ngIf="formNovoExame.get('exame')?.invalid && formNovoExame.get('exame')?.touched ">
+                            <p class="alert alert-danger ">Campo Exame é obrigatório.</p>
+                        </div>
+                    </mat-card-footer>
+                </mat-card>
+            </mat-expansion-panel>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-6 ">
+            <mat-expansion-panel (opened)="openPanel('painelExameNome')" [expanded]="isPanelOpen('painelExameNome')">
+                <mat-expansion-panel-header>
+                    <mat-panel-title> Listar Exame por nomes </mat-panel-title>
+
+                </mat-expansion-panel-header>
+                <p>Aqui você pode pesquisar exames por nome,lembre retornar todos os exames que contenham os caracteres
+                    informados</p>
+                <mat-card>
+                    <mat-card-content>
+                    </mat-card-content>
+                    <form [formGroup]="formListarExame">
+                        <div class="formNovoExame">
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Exame</mat-label>
+                                <textarea matInput formControlName="nomeExame" placeholder="Insira o nome do Exame"></textarea>
+                            </mat-form-field>
+                        </div>
+                        <button class="btn btn-lg btn-success" type="submit"
+                            (click)="onSubmitListarExame()">Enviar</button>
+
+                    </form>
+                    <mat-card-footer>
+                        <div class="container"
+                            *ngIf="formListarExame.get('nomeExame')?.invalid && formListarExame.get('nomeExame')?.touched ">
+                            <p class="alert alert-danger ">Campo Exame é obrigatório.</p>
+                        </div>
+                    </mat-card-footer>
+                </mat-card>
+            </mat-expansion-panel>
+        </div>
+    </div>
+    <div class="row">
+        <div class=" col-sm-12 col-md-6 -lg-6">
+            <mat-expansion-panel (opened)="openPanel('painelExameCD')" [expanded]="isPanelOpen('painelExameCD')">
+                <mat-expansion-panel-header>
+                    <mat-panel-title> Listar Exames Ativo </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>Abaixo voce poderá pesquisar por Exames ativos ou desativados </p>
+
+                <mat-card>
+                    <mat-card-content>
+                    </mat-card-content>
+                    <form [formGroup]="formListarExameAtivos">
+                        <div class="formNovoExame">
+                            <section class="example-section">
+                                <mat-label class="example-margin">Exames ativo: </mat-label>
+                                <mat-radio-group matInput formControlName="ic_ativo">
+                                    <mat-radio-button class="example-margin" checked value="true">Sim</mat-radio-button>
+                                    <mat-radio-button class="example-margin" value="false">Não</mat-radio-button>
+                                </mat-radio-group>
+                            </section>
+                        </div>
+                        <button class="btn btn-lg btn-success" type="submit"
+                            (click)="onSubmitListarExameAtivos()">Enviar</button>
+
+                    </form>
+                </mat-card>
+            </mat-expansion-panel>
+        </div>
+        <div class=" col-sm-12 col-md-6 -lg-6">
+            <mat-expansion-panel (opened)="openPanel('painelExameCodigo')"
+                [expanded]="isPanelOpen('painelExameCodigo')">
+                <mat-expansion-panel-header>
+                    <mat-panel-title> Listar Exame por Codigo </mat-panel-title>
+
+                </mat-expansion-panel-header>
+                <p>Aqui você pode pesquisar por código do exame </p>
+                <mat-card>
+                    <mat-card-content>
+                    </mat-card-content>
+                    <form [formGroup]="formListarExameCodigo">
+                        <div class="formNovoExame">
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Código do Exame</mat-label>
+                                <input matInput type="number" formControlName="cod_exame"
+                                    placeholder="Insira o nome do Exame">
+                            </mat-form-field>
+                        </div>
+                        <button class="btn btn-lg btn-success" type="submit"
+                            (click)="onSubmitListarExameCodigo()">Enviar</button>
+
+                    </form>
+                    <mat-card-footer>
+                        <div class="container"
+                            *ngIf="formListarExame.get('cod_exame')?.invalid && formListarExame.get('nomeExame')?.touched ">
+                            <p class="alert alert-danger ">Campo Codigo do Exame é obrigatório.</p>
+                        </div>
+                    </mat-card-footer>
+                </mat-card>
+            </mat-expansion-panel>
+        </div>
+    </div>
+    <div class="row">
+        <button class="btn btn-lg btn-success" (click)="listarTodosExame() ">Listar todos os Exames</button>
+    </div>
+    <div class="row" *ngIf="mostrarTabela">
+        <mat-form-field>
+            <mat-label>Filter</mat-label>
+            <input matInput (keyup)="applyFilter()" placeholder="Ex. Mia" #inputFilter>
+        </mat-form-field>
+        <div class="table-responsive">
+            <div class="table mat-elevation-z8">
+                <table mat-table [dataSource]="dataSource">
+                    <ng-container matColumnDef="cd_exame">
+                        <th mat-header-cell *matHeaderCellDef> Cód. </th>
+                        <td mat-cell *matCellDef="let element"> {{element.cd_exame}} </td>
+                    </ng-container>
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="nmExame">
+                        <th mat-header-cell *matHeaderCellDef> Exame </th>
+                        <td mat-cell *matCellDef="let element"> {{element.nmExame}} </td>
+                    </ng-container>
+
+                    <!-- Weight Column -->
+                    <ng-container matColumnDef="ds_detalhe_exame" style="max-width: 20vw;">
+                        <th mat-header-cell *matHeaderCellDef> Descricao </th>
+                        <td class="tamanhoCelula" mat-cell *matCellDef="let element"> {{element.ds_detalhe_exame}} </td>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="ds_detalhe_exame1">
+                        <th mat-header-cell *matHeaderCellDef> Descricao 1 </th>
+                        <td class="tamanhoCelula" mat-cell *matCellDef="let element"> {{element.ds_detalhe_exame1}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ic_ativo">
+                        <th mat-header-cell *matHeaderCellDef> Ativo </th>
+                        <td mat-cell *matCellDef="let element"> {{[element.ic_ativo==true?'Sim':"Não"]}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef> Ações </th>
+                        <td mat-cell *matCellDef="let element">
+                            <div class="btnAction">
+                                <button class="btn btn-lg btn-danger" (click)="deletarExame(element.cd_exame)">Deletar
+                                    Exame</button>
+                                <button class="btn btn-lg btn-warning" (click)="openDialog(element)">Editar Exame</button>
+                            </div>
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="4">Não encontrado Exame "{{inputFilter.value}}"</td>
+                    </tr>
+                </table>
+
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Mostar">
+                </mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>

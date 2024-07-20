@@ -1,0 +1,38 @@
+<div class="">
+    <mat-card class="position-absolute top-50 start-50 translate-middle">
+        <mat-card-header>
+            <mat-card-title-group>
+                <mat-card-title>Login</mat-card-title>
+            </mat-card-title-group>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="formInput">
+                <form [formGroup]="userForm">
+                    <div class="formBody">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Login</mat-label>
+                            <input matInput formControlName="login" placeholder="Insira o Login">
+
+
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Senha</mat-label>
+                            <input matInput type="password" formControlName="senha"
+                                placeholder="Insira a sua senha">
+                        </mat-form-field>
+                    </div>
+                    <button class="btn btn-lg btn-success" type="submit" (click)="onSubmit()">Enviar</button>
+
+                </form>
+            </div>
+        </mat-card-content>
+        <mat-card-footer>
+            <div class="container" *ngIf="userForm.get('login')?.invalid && userForm.get('login')?.touched ">
+                <p class="alert alert-danger ">Campo Login é obrigatório.</p>
+            </div>
+            <div class="container" *ngIf="userForm.get('senha')?.invalid && userForm.get('senha')?.touched">
+                <p class="alert alert-danger">Campo Senha é obrigatório.</p>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+</div>
