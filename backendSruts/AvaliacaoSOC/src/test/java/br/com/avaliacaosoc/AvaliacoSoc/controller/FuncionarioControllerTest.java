@@ -44,6 +44,7 @@ class FuncionarioControllerTest {
         usuario.setId(1l);
         usuario.setLogin("loginTests");
         usuario.setSenha("1234Will");
+
         funcionario.setCodigo(1l);
         funcionario.setNome("Willians Teste");
         funcionario.setUsuario(usuario);
@@ -53,6 +54,7 @@ class FuncionarioControllerTest {
     void funcionarioNovo() {
 
         when(funcionarioRepository.save(any(Funcionario.class))).thenReturn(funcionario);
+        when(loginController.novoUsuario(funcionario.getUsuario())).thenReturn(new ResponseEntity(HttpStatus.OK));
 
         ResponseEntity<Funcionario> responseEntity = funcionarioController.funcionarioNovo(funcionario);
 
@@ -142,7 +144,7 @@ class FuncionarioControllerTest {
         when(funcionarioRepository.findById(anyLong())).thenReturn(Optional.of(funcionario));
         ResponseEntity<Funcionario> responseEntity = funcionarioController.deletarFuncionario(funcionario.getCodigo());
 
-        assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         verify(funcionarioRepository, times(1)).findById(anyLong());
         verify(funcionarioRepository, times(1)).deleteById(anyLong());
 

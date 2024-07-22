@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 
 import static java.util.Objects.isNull;
@@ -64,7 +63,7 @@ public class ExameController {
         Exame resposta = exameRepository.findByCdExame(cd_exame);
         log.info(resposta);
         if (isNull(resposta)) {
-            throw new BasicException("Exames não foram encontrado verifique a url");
+            throw new BasicException("Exames não foram encontrado verifique o código informado");
 
         }
         return new ResponseEntity<>(resposta, HttpStatus.OK);
@@ -135,6 +134,6 @@ public class ExameController {
         } catch (BasicException e) {
             throw new BasicException("Problemas para deletar " + e.getMessage());
         }
-        return new ResponseEntity("Deletado "+exame.getNmExame()+" com sucesso", HttpStatus.OK);
+        return new ResponseEntity<>(exame, HttpStatus.OK);
     }
 }

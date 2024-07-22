@@ -34,9 +34,10 @@ public class FuncionarioController {
     @PostMapping("funcionario-novo")
     public ResponseEntity funcionarioNovo(@RequestBody Funcionario funcionario){
         log.info("Salvando o cadastro de funcionario");
-        if(!isNull(loginController.novoUsuario(funcionario.getUsuario()))){
+        ResponseEntity usuario = loginController.novoUsuario(funcionario.getUsuario());
+        if(usuario.getStatusCode().equals(HttpStatus.NOT_ACCEPTABLE)){
             log.info("Usuario ja encontrado");
-            throw new BasicException("Usuario ja cadastrado");
+            throw new BasicException("Login ja cadastrado");
         }
 
         funcionario =  funcionarioRepository.save(funcionario);
@@ -103,7 +104,7 @@ public class FuncionarioController {
         }catch (BasicException e){
             throw new BasicException("Problemas com a aplicação consulte o administrador"+e.getMessage());
         }
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        log.info("Deletado com sucesso id: {}",codigo);
+        return new ResponseEntity<>(funcionarioEditar,HttpStatus.OK);
     }
 }
