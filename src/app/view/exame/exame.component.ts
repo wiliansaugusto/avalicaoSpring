@@ -8,7 +8,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Exame } from '../../model/Exame';
 import { MatDialog } from '@angular/material/dialog';
-import { ModalFuncionarioComponent } from '../modal/modal-funcionario/modal-funcionario.component';
+import { ModalModalExameComponent } from '../modal/modal-exame/modal-modal-exame.component';
 
 @Component({
   selector: 'app-exame',
@@ -45,7 +45,7 @@ export class ExameComponent {
     this.dataSource.data = this.elementeData;
     this.dataSource.paginator = this.paginator;
 
-    if (sessionStorage.getItem('login')) {
+    if (!sessionStorage.getItem('login')) {
       console.log("session" + sessionStorage.getItem('login'));
 
       this.openSnackBar("Usuário precisa estar logado", "Fechar");
@@ -78,15 +78,16 @@ export class ExameComponent {
 
   onSubmitExame() {
 
-    if (!this.validarNovoExame) {
-      this.mostrarTabela=true
-      this.dataSource.data = this.elementeData
-      this.dataSource.paginator = this.paginator;
-      this.deletarExameTabela(0)
-
-      this.validarNovoExame = true;
-    }
     if (this.formNovoExame.valid) {
+
+      if (!this.validarNovoExame) {
+        this.mostrarTabela = true
+        this.dataSource.data = this.elementeData
+        this.dataSource.paginator = this.paginator;
+        this.deletarExameTabela(0)
+
+        this.validarNovoExame = true;
+      }
       const novoExame = {
         nmExame: this.formNovoExame.get('exame')?.value,
         ds_detalhe_exame: this.formNovoExame.get('descricao')?.value,
@@ -107,6 +108,9 @@ export class ExameComponent {
         this.formNovoExame?.reset();
       })
 
+    }  else{
+      this.formNovoExame.markAllAsTouched();
+
     }
   }
   onSubmitListarExame() {
@@ -116,7 +120,7 @@ export class ExameComponent {
     if (this.formListarExame.valid) {
       const listarExameNome = {
         nmExame: this.formListarExame.get('nomeExame')?.value,
-        
+
 
       }
       this.exameService.listarExamesNome(listarExameNome).subscribe((resp: HttpResponse<any>) => {
@@ -134,6 +138,9 @@ export class ExameComponent {
 
       })
       this.limparFiltro();
+    }  else{
+      this.formListarExame.markAllAsTouched();
+
     }
   }
   onSubmitListarExameAtivos() {
@@ -154,6 +161,9 @@ export class ExameComponent {
         this.mostrarTabela = false;
 
       })
+
+    }else{
+      this.formListarExameAtivos.markAllAsTouched();
 
     }
     this.limparFiltro();
@@ -184,6 +194,8 @@ export class ExameComponent {
     } else {
       this.openSnackBar("O numero deve ser um inteiro", "Fechar");
       this.formListarExameCodigo.reset()
+      this.formListarExameCodigo.markAllAsTouched()
+
     }
     this.limparFiltro();
 
@@ -244,7 +256,6 @@ export class ExameComponent {
     }, (error: HttpErrorResponse) => {
       console.warn(error);
       this.openSnackBar(error.error, "Fechar")
-      this.formListarExameCodigo.get("cod_exame")?.reset()
     })
   }
   openSnackBar(message: string, action: string = 'Fechar'): void {
@@ -292,7 +303,7 @@ export class ExameComponent {
   }
 
   openDialog(exame: Exame): void {
-    const dialogRef = this.dialog.open(ModalFuncionarioComponent, {
+    const dialogRef = this.dialog.open(ModalModalExameComponent, {
       data: { exame },
     });
 

@@ -21,6 +21,7 @@ import {MatTableModule} from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { ModalFuncionarioComponent } from './view/modal/modal-funcionario/modal-funcionario.component';
 import {MatDialogModule} from '@angular/material/dialog';
+import { ModalModalExameComponent } from './view/modal/modal-exame/modal-modal-exame.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import {MatDialogModule} from '@angular/material/dialog';
     ExameComponent,
     DashboardComponent,
     FuncionarioComponent,
-    ModalFuncionarioComponent
+    ModalFuncionarioComponent,
+    ModalModalExameComponent
   ],
   imports: [
     BrowserModule,

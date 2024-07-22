@@ -1,27 +1,36 @@
 <mat-drawer-container class="example-container" autosize>
     <mat-drawer #drawer class="example-sidenav" mode="over">
         <h3 class="text-center">Links</h3>
-        <ul >
+        <ul>
             <li><a class="btn btnClick" (click)="drawer.toggle()" routerLink="/"><mat-icon class="btnLinks"
-                 aria-hidden="false" aria-label="Example home icon" fontIcon="login"></mat-icon>Login</a></li>
+                        aria-hidden="false" aria-label="Example home icon" fontIcon="login"></mat-icon>Login</a></li>
             <li><a class="btn btnClick" (click)="drawer.toggle()" routerLink="/dashboard"><mat-icon class="btnLinks"
-                aria-hidden="false" aria-label="Example home icon" fontIcon="dashboard"></mat-icon>Dashboard</a></li>
+                        aria-hidden="false" aria-label="Example home icon" fontIcon="dashboard"></mat-icon>Dashboard</a>
+            </li>
             <li><a class="btn btnClick" (click)="drawer.toggle()" routerLink="/funcionario"><mat-icon class="btnLinks"
-                aria-hidden="false" aria-label="Example home icon" fontIcon="person"></mat-icon>Funcionario</a></li>
-            <li><a class="btn btnClick" (click)="drawer.toggle()" routerLink="/exame"><mat-icon  class="btnLinks" 
-                aria-hidden="false" aria-label="Example home icon" fontIcon="description"></mat-icon>Exame</a></li>
+                        aria-hidden="false" aria-label="Example home icon" fontIcon="person"></mat-icon>Funcionario</a>
+            </li>
+            <li><a class="btn btnClick" (click)="drawer.toggle()" routerLink="/exame"><mat-icon class="btnLinks"
+                        aria-hidden="false" aria-label="Example home icon" fontIcon="description"></mat-icon>Exame</a>
+            </li>
+        </ul>
+        <hr>
+        <ul>
+            <li><a class="btn btnClick"  (click)="sair(); drawer.toggle()"><mat-icon class="btnLinks"
+                        aria-hidden="false" aria-label="Example home icon" fontIcon="description"></mat-icon>Sair</a>
+            </li>
         </ul>
     </mat-drawer>
 
     <div class="example-sidenav-content">
-        <h3 class="position-absolute  start-50 translate-middle-x" >Sistema de Avaliação</h3>
+        <h3 class="position-absolute  start-50 translate-middle-x">Sistema de Avaliação</h3>
 
         <nav class="navbar ">
             <button class="btn" type="button" mat-button (click)="drawer.toggle()">
                 <mat-icon class="btnmenu" aria-hidden="false" aria-label="Example home icon" fontIcon="menu"></mat-icon>
             </button>
         </nav>
-  
+
     </div>
     <div>
         <router-outlet></router-outlet>

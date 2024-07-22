@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class ExameService {
 
-  private apiUrl = 'http://localhost:8080/api/'; // substitua pela URL da sua API
+  private apiUrl = 'http://localhost:8080/api/'; 
   private headers = new HttpHeaders({
     'Content-Type': 'application/json'
   });

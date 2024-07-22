@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { MatSidenav } from '@angular/material/sidenav';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +7,12 @@ import { MatSidenav } from '@angular/material/sidenav';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-show = false;
+  show = false;
+  constructor(private router: Router) { }
+  sair() {
+    sessionStorage.clear();
+    this.router.navigate(['/']);
+  }
 
 
 }

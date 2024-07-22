@@ -2,39 +2,30 @@
     <mat-card-content>
         <mat-card-header>
             <mat-card-title>
-                <p>Edição de Exame </p>
+                <p>Edição de Funcionário </p>
             </mat-card-title>
         </mat-card-header>
-
-
     </mat-card-content>
     <form [formGroup]="formEditar">
         <div class="formEditar">
             <mat-form-field class="example-full-width">
-                <mat-label>Exame</mat-label>
-                <textarea matInput formControlName="nmExame" placeholder="Insira nome do exame"></textarea>
+                <mat-label>Funcionario</mat-label>
+                <textarea matInput formControlName="nome" placeholder="Insira nome do exame"></textarea>
             </mat-form-field>
 
             <mat-form-field class="example-full-width">
-                <mat-label>Descriçao </mat-label>
-                <textarea matInput formControlName="ds_detalhe_exame" placeholder="Insira a descricao"></textarea>
+                <mat-label>login </mat-label>
+                <input matInput formControlName="login" placeholder="Insira a login">
             </mat-form-field>
             <mat-form-field class="example-full-width">
-                <mat-label>Descricao 2</mat-label>
-                <textarea matInput formControlName="ds_detalhe_exame1"
-                    placeholder="Insira a segunda descricao"></textarea>
+                <mat-label>Senha</mat-label>
+                <input type="password" matInput formControlName="senha"
+                    placeholder="Insira a senha">
             </mat-form-field>
-            <section class="example-section">
-                <mat-label class="example-margin">Ativo: </mat-label>
-                <mat-radio-group matInput formControlName="ic_ativo">
-                    <mat-radio-button class="example-margin" [value]="true">Sim</mat-radio-button>
-                    <mat-radio-button class="example-margin" [value]="false">Não</mat-radio-button>
-                </mat-radio-group>
-            </section>
+       
         </div>
-        <button class="btn btn-lg btn-success" type="submit" (click)="onSubmitExame()">Salvar
+        <button class="btn btn-lg btn-success" type="submit" (click)="onSubmit()">Salvar
             Exame</button>
-
     </form>
     <mat-card-footer>
         <div class="container" *ngIf="formEditar.get('exame')?.invalid && formEditar.get('exame')?.touched ">

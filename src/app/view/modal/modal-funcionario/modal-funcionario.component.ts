@@ -1,8 +1,9 @@
 import { Component, Inject, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Exame } from '../../../model/Exame';
-import { timeout } from 'rxjs';
+import { Usuario } from '../../../model/Usuario';
+import { Funcionario } from '../../../model/Funcionario';
+
 
 @Component({
   selector: 'app-modal-funcionario',
@@ -16,19 +17,22 @@ export class ModalFuncionarioComponent {
   constructor(private formConstructor: FormBuilder, public dialogRef: MatDialogRef<ModalFuncionarioComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
+
     this.formEditar = formConstructor.group({
-      cd_exame: [data.exame.cd_exame],
-      nmExame: [data.exame.nmExame, Validators.required],
-      ds_detalhe_exame: [data.exame.ds_detalhe_exame],
-      ds_detalhe_exame1: [data.exame.ds_detalhe_exame1],
-      ic_ativo: [data.exame.ic_ativo, Validators.required]
+      nome: [data.funcionario.nome, Validators.required],
+      login: [data.funcionario.usuario.login, Validators.required],
+      senha: [data.funcionario.usuario.senha, Validators.required],
+
     })
 
   }
-  onSubmitExame() {
+  onSubmit() {
     if (this.formEditar.valid) {
       this.dialogRef.close(this.formEditar.value);
+    }else{
+      this.formEditar.markAllAsTouched();
+
     }
-    
+
   }
 }
