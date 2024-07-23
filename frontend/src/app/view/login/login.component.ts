@@ -34,13 +34,11 @@ export class LoginComponent {
       this.route.navigate(["dashboard"])
 
       }, (erro: HttpErrorResponse) => {
-        console.log(erro.error);
         sessionStorage.clear();
         this.userForm.reset()
         this.openSnackBar(erro.error, "fechar")
       })
     }
-      console.warn(sessionStorage.getItem('login'));
       
   }
 

@@ -11,7 +11,6 @@ export class DashboardComponent {
 
   constructor(private router: Router, private snackBar: MatSnackBar) {
     if (!sessionStorage.getItem('login')) {
-      console.log("session"+sessionStorage.getItem('login'));
       
       this.openSnackBar("Usuário precisa estar logado", "Fechar");
       router.navigate(["/"]);

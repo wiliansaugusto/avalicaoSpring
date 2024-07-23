@@ -47,7 +47,6 @@ export class ExameComponent {
     this.dataSource.paginator = this.paginator;
 
     if (!sessionStorage.getItem('login')) {
-      console.log("session" + sessionStorage.getItem('login'));
 
       this.openSnackBar("Usuário precisa estar logado", "Fechar");
       router.navigate(["/"]);
@@ -105,7 +104,6 @@ export class ExameComponent {
 
         this.spiner.hide()
       }, (error: HttpErrorResponse) => {
-        console.warn(error);
         this.openSnackBar(error.error, "Fechar")
         this.formNovoExame?.reset();
         this.spiner.hide()
@@ -130,14 +128,12 @@ export class ExameComponent {
       this.exameService.listarExamesNome(listarExameNome).subscribe((resp: HttpResponse<any>) => {
         const body = resp.body;
         const status = resp.status
-        console.warn(body);
         this.dataSource.data = body
         this.dataSource.paginator = this.paginator;
         this.spiner.hide()
 
 
       }, (error: HttpErrorResponse) => {
-        console.warn(error);
         this.openSnackBar(error.error, "Fechar")
         this.formNovoExame.get("nomeExame")?.reset()
         this.mostrarTabela = false;
@@ -162,13 +158,11 @@ export class ExameComponent {
       this.exameService.geExamesAtivos(ic_ativo).subscribe((resp: HttpResponse<any>) => {
         const body = resp.body;
         const status = resp.status
-        console.warn(body);
         this.dataSource.data = body
         this.dataSource.paginator = this.paginator;
         this.spiner.hide()
 
       }, (error: HttpErrorResponse) => {
-        console.warn(error);
         this.openSnackBar(error.error, "Fechar")
         this.formNovoExame.get("nomeExame")?.reset();
         this.mostrarTabela = false;
@@ -196,13 +190,11 @@ export class ExameComponent {
       this.exameService.geExamesCodigo(cod_exame).subscribe((resp: HttpResponse<any>) => {
         const body: Exame[] = new Array(Object.assign(resp.body));
         const status = resp.status
-        console.warn(body);
         this.dataSource.data = body
         this.dataSource.paginator = this.paginator;
         this.spiner.hide()
 
       }, (error: HttpErrorResponse) => {
-        console.warn(error);
         this.openSnackBar(error.error, "Fechar")
         this.formListarExameCodigo.get("cod_exame")?.reset()
         this.mostrarTabela = false;
@@ -227,14 +219,11 @@ export class ExameComponent {
 
     this.exameService.getTodosExames().subscribe((resp: HttpResponse<any>) => {
       const body = resp.body;
-      const status = resp.status
-      console.warn(body);
       this.dataSource.data = body
       this.dataSource.paginator = this.paginator;
       this.spiner.hide()
 
     }, (error: HttpErrorResponse) => {
-      console.warn(error);
       this.openSnackBar(error.error, "Fechar")
       this.formListarExameCodigo.get("cod_exame")?.reset()
       this.mostrarTabela = false;
@@ -249,16 +238,13 @@ export class ExameComponent {
 
       this.exameService.editarExame(exameeditar).subscribe((resp: any) => {
         const body = resp.body;
-        const status = resp.status
-        console.warn(body);
+
         this.dataSource.data = body
         this.dataSource.paginator = this.paginator;
         resolve();
         this.spiner.hide()
 
-
       }, (error: HttpErrorResponse) => {
-        console.warn(error);
         this.openSnackBar(error.error, "Fechar")
         this.formListarExameCodigo.get("cod_exame")?.reset()
         this.mostrarTabela = false;
@@ -274,8 +260,6 @@ export class ExameComponent {
 
     this.exameService.deletar(id).subscribe((resp: HttpResponse<any>) => {
       const body = resp.body;
-      const status = resp.status
-      console.warn(body);
       this.deletarExameTabela(id);
       this.openSnackBar("Deletado com sucesso - ".concat(body.nmExame), "Fechar")
       this.spiner.hide()
@@ -283,8 +267,6 @@ export class ExameComponent {
 
     }, (error: HttpErrorResponse) => {
       this.spiner.hide()
-
-      console.warn(error);
       this.openSnackBar(error.error, "Fechar")
 
     })
@@ -303,11 +285,8 @@ export class ExameComponent {
   }
   deletarExameTabela(id: any) {
     const index = this.dataSource.data.findIndex((element) => element.cd_exame === id);
-    console.log("entrou no deletar tabela com id: " + id);
-    console.log("retorno do index: " + index);
 
     if (index != null) {
-      console.warn("Entrou no if da tabela");
 
       this.dataSource.data.splice(index, 1);
       this.dataSource._updateChangeSubscription()
