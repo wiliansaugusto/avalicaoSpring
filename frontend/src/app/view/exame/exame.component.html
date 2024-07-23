@@ -14,7 +14,8 @@
                         <div class="formNovoExame">
                             <mat-form-field class="example-full-width">
                                 <mat-label>Exame</mat-label>
-                                <textarea matInput formControlName="exame" placeholder="Insira o nome do Exame"></textarea>
+                                <textarea matInput formControlName="exame"
+                                    placeholder="Insira o nome do Exame"></textarea>
                             </mat-form-field>
                             <mat-form-field class="example-full-width">
                                 <mat-label>Descriçao </mat-label>
@@ -62,7 +63,8 @@
                         <div class="formNovoExame">
                             <mat-form-field class="example-full-width">
                                 <mat-label>Exame</mat-label>
-                                <textarea matInput formControlName="nomeExame" placeholder="Insira o nome do Exame"></textarea>
+                                <textarea matInput formControlName="nomeExame"
+                                    placeholder="Insira o nome do Exame"></textarea>
                             </mat-form-field>
                         </div>
                         <button class="btn btn-lg btn-success" type="submit"
@@ -143,6 +145,12 @@
     <div class="row">
         <button class="btn btn-lg btn-success" (click)="listarTodosExame() ">Listar todos os Exames</button>
     </div>
+
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "line-spin-fade"  [fullScreen] = "true">
+        <p style="color: white" > Carregando ... </p>
+    </ngx-spinner>
+
+
     <div class="row" *ngIf="mostrarTabela">
         <mat-form-field>
             <mat-label>Filter</mat-label>
@@ -185,7 +193,8 @@
                             <div class="btnAction">
                                 <button class="btn btn-lg btn-danger" (click)="deletarExame(element.cd_exame)">Deletar
                                     Exame</button>
-                                <button class="btn btn-lg btn-warning" (click)="openDialog(element)">Editar Exame</button>
+                                <button class="btn btn-lg btn-warning" (click)="openDialog(element)">Editar
+                                    Exame</button>
                             </div>
                         </td>
                     </ng-container>

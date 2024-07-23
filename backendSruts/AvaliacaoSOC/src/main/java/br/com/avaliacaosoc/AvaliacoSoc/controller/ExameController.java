@@ -13,6 +13,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Objects.isNull;
@@ -27,13 +33,13 @@ public class ExameController {
 
     private static final Logger log = LogManager.getLogger(ExameController.class);
 
-    Pageable pageable = PageRequest.of(0, 100);
+    Pageable pageable = PageRequest.of(0, 24000);
 
     @GetMapping("listar-todos-exames")
     public ResponseEntity getAllExame() {
 
         log.info("pesquisando todos os exames: ");
-        List<Exame> resposta = exameRepository.findAll();
+        List<Exame> resposta = exameRepository.findAll(pageable).stream().toList();
         log.info("há no banco: {}", exameRepository.count());
         log.info("Tem {} listados: ", resposta.size());
         if (resposta.isEmpty()) {
@@ -104,7 +110,7 @@ public class ExameController {
 
     @PostMapping("novo-exame")
     public ResponseEntity novoExame(@RequestBody Exame exame) {
-        if (!isNull(exameRepository.findByNmExame(exame.getNmExame()))){
+        if (!isNull(exameRepository.findByNmExame(exame.getNmExame()))) {
             log.info("exame encontrado");
             throw new BasicException("Exame já existente");
         }
@@ -121,7 +127,7 @@ public class ExameController {
     @DeleteMapping("deletar-exame/{cd_exame}")
     public ResponseEntity deletarUsuario(@PathVariable Long cd_exame) {
         Exame exame = exameRepository.findByCdExame(cd_exame);
-        if (isNull(exame)){
+        if (isNull(exame)) {
             throw new BasicException("Exame não encontrado");
         }
         try {
@@ -136,4 +142,75 @@ public class ExameController {
         }
         return new ResponseEntity<>(exame, HttpStatus.OK);
     }
+
+    @GetMapping("importar-banco-de-dados")
+    public void importarBanco() {
+        final String DB_URL = "jdbc:mysql://localhost:3306/avaliacao";
+        final String DB_USER = "root";
+        final String DB_PASSWORD ="";
+        final String SQL_FILE_PATH = "C:\\Users\\wilia\\Downloads\\avaliacao1\\";
+
+        Connection connection = null;
+        Statement statement = null;
+        BufferedReader br = null;
+        File folder = new File(SQL_FILE_PATH);
+        File[] files = folder.listFiles();
+
+        if (files == null || files.length == 0) {
+            System.out.println("Nenhum arquivo .arquivo encontrado na pasta.");
+            return;
+        }
+        try {
+            // Conectar ao banco de dados
+            connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            statement = connection.createStatement();
+
+            // Processar cada arquivo na pasta
+            for (File file : files) {
+                System.out.println("Processando arquivo: " + file.getName());
+                br = new BufferedReader(new FileReader(file));
+                processFile(br, statement);
+            }
+
+            System.out.println("Importação dos arquivos concluída com sucesso!");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+                if (br != null) br.close();
+            } catch (SQLException | IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static void processFile(BufferedReader br, Statement statement) {
+        StringBuilder sql = new StringBuilder();
+        String line;
+
+        try {
+            while ((line = br.readLine()) != null) {
+                sql.append(line).append("\n");
+                // Executar comandos ao encontrar um ponto e vírgula (;)
+                if (line.trim().endsWith(";")) {
+                    statement.execute(sql.toString());
+                    sql.setLength(0); // Reset the StringBuilder
+                }
+            }
+            // Executar o último comando se não terminar com ;
+            if (sql.length() > 0) {
+                statement.execute(sql.toString());
+            }
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
 }

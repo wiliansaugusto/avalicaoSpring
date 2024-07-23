@@ -3,15 +3,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { ExameService } from '../../service/exame.service';
 import { Funcionario } from '../../model/Funcionario';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { FuncionarioService } from '../../service/funcionario.service';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Usuario } from '../../model/Usuario';
-import { isEmpty } from 'rxjs';
+
 import { ModalFuncionarioComponent } from '../modal/modal-funcionario/modal-funcionario.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-funcionario',
@@ -36,15 +35,15 @@ export class FuncionarioComponent {
   formNovoFuncionario!: FormGroup;
   formListarFuncionarios!: FormGroup;
 
-  constructor(private router: Router, private snackBar: MatSnackBar,
+  constructor(private router: Router, private snackBar: MatSnackBar, private spiner: NgxSpinnerService,
     private formConstructor: FormBuilder, private funcionarioService: FuncionarioService, public dialog: MatDialog) {
 
     this.dataSource.data = this.elementeData;
     this.dataSource.paginator = this.paginator;
     this.formNovoFuncionario = this.formConstructor.group({
       nome: ['', Validators.required],
-      login: ['',Validators.required],
-      senha: ['',Validators.required]
+      login: ['', Validators.required],
+      senha: ['', Validators.required]
     });
 
     this.formListarFuncionarios = formConstructor.group({
@@ -62,21 +61,23 @@ export class FuncionarioComponent {
 
   }
   onSubmitFuncionarioNovo() {
-    
+
     if (this.formNovoFuncionario.valid) {
+      this.spiner.show()
+
       if (!this.validarNovoFuncionario) {
         this.mostrarTabela = true
         this.dataSource.data = this.elementeData
         this.dataSource.paginator = this.paginator;
         this.deletarFuncionarioTabela(0)
-  
+
         this.validarNovoFuncionario = true;
       }
       const usuarioNovo = {
         login: this.formNovoFuncionario.get('login')?.value,
         senha: this.formNovoFuncionario.get('senha')?.value
       }
-   
+
       const funcionarioNovo = {
 
         nome: this.formNovoFuncionario.get('nome')?.value,
@@ -90,18 +91,23 @@ export class FuncionarioComponent {
         this.dataSource.data.push(body)
         this.dataSource.paginator = this.paginator;
         this.formNovoFuncionario.reset();
+        this.spiner.hide()
+
       }, (error: HttpErrorResponse) => {
         console.warn(error);
+        this.spiner.hide()
         this.openSnackBar(error.error, "Fechar")
         // this.formListarExameCodigo.get("cod_exame")?.reset()
       })
 
-    }else{
+    } else {
       this.formNovoFuncionario.markAllAsTouched();
 
     }
   }
   deletarFuncionario(id: any) {
+    this.spiner.show()
+
     this.funcionarioService.deleteFuncionario(id).subscribe((resp: HttpResponse<any>) => {
       const body = resp.body;
       const status = resp.status
@@ -109,9 +115,12 @@ export class FuncionarioComponent {
       console.warn(body);
       this.deletarFuncionarioTabela(id);
       this.openSnackBar("Deletado com sucesso - ".concat(body.nome), "Fechar")
+      this.spiner.hide()
 
     }, (error: HttpErrorResponse) => {
       console.warn(error);
+      this.spiner.hide()
+
       this.openSnackBar(error.error, "Fechar")
       // this.formListarExameCodigo.get("cod_exame")?.reset()
     })
@@ -119,6 +128,8 @@ export class FuncionarioComponent {
   }
 
   listarTodosFuncionario() {
+    this.spiner.show()
+
     this.mostrarTabela = true;
     this.openPanelId = " ";
     this.validarNovoFuncionario = false;
@@ -129,9 +140,10 @@ export class FuncionarioComponent {
       console.warn(body);
       this.dataSource.data = body
       this.dataSource.paginator = this.paginator;
-
+      this.spiner.hide()
 
     }, (error: HttpErrorResponse) => {
+      this.spiner.hide()
       console.warn(error);
       this.openSnackBar(error.error, "Fechar")
       this.mostrarTabela = false;
@@ -164,27 +176,27 @@ export class FuncionarioComponent {
     }
   }
   openDialog(funcionario: Funcionario): void {
-    console.log("!entrou"+funcionario);
-    
+    console.log("!entrou" + funcionario);
+
     const dialogRef = this.dialog.open(ModalFuncionarioComponent, {
       data: { funcionario },
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        funcionario.nome =  result.nome;
+        funcionario.nome = result.nome;
         funcionario.usuario!.login = result.login;
         funcionario.usuario!.senha = result.senha;
 
         console.log(funcionario);
-        
+
         this.editarFuncionario(funcionario).then(() => {
           this.atualizarTabela();
 
         }).catch((err) => {
           alert(err)
           console.error(err);
-          
+
         });
       }
     });
@@ -232,37 +244,37 @@ export class FuncionarioComponent {
 
     } else if (this.formListarFuncionarios.get('codigo')!.value) {
       this.funcionarioService.getFuncionarioID(this.formListarFuncionarios.get('codigo')!.value).subscribe((resp: HttpResponse<any>) => {
-        const body: Funcionario [] =[];
-          body.push(resp.body);
+        const body: Funcionario[] = [];
+        body.push(resp.body);
         console.warn(body);
         this.dataSource.data = body
         this.dataSource.paginator = this.paginator;
-        
-      }, (error: HttpErrorResponse)=>{
+
+      }, (error: HttpErrorResponse) => {
         console.warn(error);
         this.openSnackBar(error.error, "Fechar")
         this.mostrarTabela = false;
-  
+
       })
 
     } else if (this.formListarFuncionarios.get('nome')!.value) {
-      const funcionario : Funcionario ={
-        nome:  this.formListarFuncionarios.get('nome')!.value
+      const funcionario: Funcionario = {
+        nome: this.formListarFuncionarios.get('nome')!.value
       }
       this.funcionarioService.listarFuncionarioNome(funcionario).subscribe((resp: HttpResponse<any>) => {
-        const body:any [] = resp.body;
+        const body: any[] = resp.body;
         console.warn(body);
         this.dataSource.data = body
         this.dataSource.paginator = this.paginator;
         console.log(body.length === 0);
-        if(body.length === 0 ){
+        if (body.length === 0) {
           this.openSnackBar("Funcionario não encontrado", "Fechar")
         }
-      }, (error: HttpErrorResponse)=>{
+      }, (error: HttpErrorResponse) => {
         console.warn(error);
         this.openSnackBar(error.error, "Fechar")
         this.mostrarTabela = false;
-  
+
       })
     } else {
       this.openSnackBar("Você deve informar pelo ao menos um dos dois campos", "Fechar")

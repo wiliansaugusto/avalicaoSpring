@@ -22,6 +22,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { ModalFuncionarioComponent } from './view/modal/modal-funcionario/modal-funcionario.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { ModalModalExameComponent } from './view/modal/modal-exame/modal-modal-exame.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import { ModalModalExameComponent } from './view/modal/modal-exame/modal-modal-e
     MatRadioModule,
     MatTableModule,
     MatPaginatorModule,
-    MatDialogModule
+    MatDialogModule,
+    NgxSpinnerModule.forRoot({ type: 'line-spin-fade' }), 
 
   ],
   providers: [

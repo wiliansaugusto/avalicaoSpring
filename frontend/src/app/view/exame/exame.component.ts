@@ -9,6 +9,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Exame } from '../../model/Exame';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalModalExameComponent } from '../modal/modal-exame/modal-modal-exame.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-exame',
@@ -38,7 +39,7 @@ export class ExameComponent {
   @ViewChild('inputFilter') inputFilter!: ElementRef<HTMLInputElement>;
   openPanelId: string = '';
   validarNovoExame = false;
-  constructor(private router: Router, private snackBar: MatSnackBar,
+  constructor(private router: Router, private snackBar: MatSnackBar, private spiner: NgxSpinnerService,
     private formConstructor: FormBuilder, private exameService: ExameService, public dialog: MatDialog
 
   ) {
@@ -77,7 +78,7 @@ export class ExameComponent {
   }
 
   onSubmitExame() {
-
+    this.spiner.show();
     if (this.formNovoExame.valid) {
 
       if (!this.validarNovoExame) {
@@ -102,18 +103,21 @@ export class ExameComponent {
         this.dataSource.data.push(body)
         this.dataSource.paginator = this.paginator;
 
+        this.spiner.hide()
       }, (error: HttpErrorResponse) => {
         console.warn(error);
         this.openSnackBar(error.error, "Fechar")
         this.formNovoExame?.reset();
+        this.spiner.hide()
       })
 
-    }  else{
+    } else {
       this.formNovoExame.markAllAsTouched();
 
     }
   }
   onSubmitListarExame() {
+    this.spiner.show()
 
     this.mostrarTabela = true;
     this.validarNovoExame = false
@@ -129,23 +133,30 @@ export class ExameComponent {
         console.warn(body);
         this.dataSource.data = body
         this.dataSource.paginator = this.paginator;
+        this.spiner.hide()
+
 
       }, (error: HttpErrorResponse) => {
         console.warn(error);
         this.openSnackBar(error.error, "Fechar")
         this.formNovoExame.get("nomeExame")?.reset()
         this.mostrarTabela = false;
+        this.spiner.hide()
+
 
       })
       this.limparFiltro();
-    }  else{
+    } else {
       this.formListarExame.markAllAsTouched();
+      this.spiner.hide()
+
 
     }
   }
   onSubmitListarExameAtivos() {
     this.validarNovoExame = false;
     if (this.formListarExameAtivos.valid) {
+      this.spiner.show()
       this.mostrarTabela = true;
       const ic_ativo = this.formListarExameAtivos.get('ic_ativo')?.value
       this.exameService.geExamesAtivos(ic_ativo).subscribe((resp: HttpResponse<any>) => {
@@ -154,15 +165,18 @@ export class ExameComponent {
         console.warn(body);
         this.dataSource.data = body
         this.dataSource.paginator = this.paginator;
+        this.spiner.hide()
+
       }, (error: HttpErrorResponse) => {
         console.warn(error);
         this.openSnackBar(error.error, "Fechar")
         this.formNovoExame.get("nomeExame")?.reset();
         this.mostrarTabela = false;
+        this.spiner.hide()
 
       })
 
-    }else{
+    } else {
       this.formListarExameAtivos.markAllAsTouched();
 
     }
@@ -173,6 +187,8 @@ export class ExameComponent {
     this.validarNovoExame = false;
 
     if (this.formListarExameCodigo.valid && this.validadorInteger() === true) {
+      this.spiner.show()
+
       this.mostrarTabela = true;
 
       const cod_exame = this.formListarExameCodigo.get("cod_exame")?.value
@@ -183,12 +199,15 @@ export class ExameComponent {
         console.warn(body);
         this.dataSource.data = body
         this.dataSource.paginator = this.paginator;
+        this.spiner.hide()
 
       }, (error: HttpErrorResponse) => {
         console.warn(error);
         this.openSnackBar(error.error, "Fechar")
         this.formListarExameCodigo.get("cod_exame")?.reset()
         this.mostrarTabela = false;
+        this.spiner.hide()
+
       })
 
     } else {
@@ -201,6 +220,7 @@ export class ExameComponent {
 
   }
   listarTodosExame() {
+    this.spiner.show()
     this.mostrarTabela = true;
     this.openPanelId = " ";
     this.validarNovoExame = false;
@@ -211,20 +231,21 @@ export class ExameComponent {
       console.warn(body);
       this.dataSource.data = body
       this.dataSource.paginator = this.paginator;
-
+      this.spiner.hide()
 
     }, (error: HttpErrorResponse) => {
       console.warn(error);
       this.openSnackBar(error.error, "Fechar")
       this.formListarExameCodigo.get("cod_exame")?.reset()
       this.mostrarTabela = false;
-
+      this.spiner.hide()
     })
     this.limparFiltro();
 
   }
   editarExame(exameeditar: Exame): Promise<void> {
     return new Promise((resolve, reject) => {
+      this.spiner.show()
 
       this.exameService.editarExame(exameeditar).subscribe((resp: any) => {
         const body = resp.body;
@@ -233,6 +254,8 @@ export class ExameComponent {
         this.dataSource.data = body
         this.dataSource.paginator = this.paginator;
         resolve();
+        this.spiner.hide()
+
 
       }, (error: HttpErrorResponse) => {
         console.warn(error);
@@ -240,11 +263,14 @@ export class ExameComponent {
         this.formListarExameCodigo.get("cod_exame")?.reset()
         this.mostrarTabela = false;
         reject();
+        this.spiner.hide()
+
       })
       this.limparFiltro();
     })
   }
   deletarExame(id: any) {
+    this.spiner.show()
 
     this.exameService.deletar(id).subscribe((resp: HttpResponse<any>) => {
       const body = resp.body;
@@ -252,10 +278,15 @@ export class ExameComponent {
       console.warn(body);
       this.deletarExameTabela(id);
       this.openSnackBar("Deletado com sucesso - ".concat(body.nmExame), "Fechar")
+      this.spiner.hide()
+
 
     }, (error: HttpErrorResponse) => {
+      this.spiner.hide()
+
       console.warn(error);
       this.openSnackBar(error.error, "Fechar")
+
     })
   }
   openSnackBar(message: string, action: string = 'Fechar'): void {
