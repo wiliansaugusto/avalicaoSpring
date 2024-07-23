@@ -91,21 +91,24 @@ class ExameControllerTest {
         exame.setNmExame("teste");
         exame.setCd_exame(1L);
         List<Exame> exameList = Collections.singletonList(exame);
-
-        when(exameRepository.findAll()).thenReturn(exameList);
+        Page<Exame> examePage = new PageImpl<>(exameList);
+        List<Exame> exameListEmpty = Collections.emptyList();
+        Page<Exame> examePageEmpty = new PageImpl<>(exameListEmpty);
+        Pageable pageable = PageRequest.of(0, 24000);
+        when(exameRepository.findAll(pageable)).thenReturn(examePage);
 
         ResponseEntity responseEntity = exameController.getAllExame();
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(exameList, responseEntity.getBody());
 
-        verify(exameRepository, times(1)).findAll();
+        verify(exameRepository, times(1)).findAll(pageable);
 
-        when(exameRepository.findAll()).thenReturn(Collections.emptyList());
+        when(exameRepository.findAll(pageable)).thenReturn(examePageEmpty);
 
         assertThrows(BasicException.class, () -> exameController.getAllExame());
 
-        when(exameRepository.findAll()).thenThrow(new BasicException("erro"));
+        when(exameRepository.findAll(pageable)).thenThrow(new BasicException("erro"));
 
         assertThrows(BasicException.class, () -> exameController.getAllExame());
 
@@ -122,7 +125,7 @@ class ExameControllerTest {
         List<Exame> exameList = Collections.singletonList(exame);
         Page<Exame> examePage = new PageImpl<>(exameList);
 
-        Pageable pageable = PageRequest.of(0, 100);
+        Pageable pageable = PageRequest.of(0, 24000);
 
         when(exameRepository.findByIcAtivo(true, pageable)).thenReturn(examePage);
 
